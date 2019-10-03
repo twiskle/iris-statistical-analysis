@@ -5,7 +5,7 @@ import pandas as pd
 import matplotlib.pyplot as plt
 from sklearn import datasets
 import scipy.stats as stats
-#import plotnine as p9
+import plotnine as p9
 #import statsmodels as sm
 
 
@@ -44,11 +44,32 @@ input()
 '''
 
 
+# Print density plot, mean, median, and mode
+print(p9.ggplot(iris_df)+ p9.aes(x='sepal length (cm)')+ p9.geom_density(alpha=0.2))
+print(iris_df.mean())
+print(iris_df.median())
+print(iris_df.mode())
+
+
+# Calculate theoretical quantiles
+tq = stats.probplot(iris_df['sepal length (cm)'], dist="norm")
+
+# Create Dataframe
+df_temp = pd.DataFrame(data= {'Theoretical Quantiles': tq[0][0], 
+                         "Ordered Values": iris_df['sepal length (cm)'].sort_values() })
+
+# Create Q-Q plot
+print(p9.ggplot(df_temp)+ p9.aes('Theoretical Quantiles','Ordered Values') +p9.geom_point())
+
+
+
 # Extract data with particular label (target)
 #a = iris_df[['sepal length (cm)','species']]
 a_sl = iris_df.loc[iris_df['species']== 0,'sepal length (cm)']
 a_pl = iris_df.loc[iris_df['species']== 0,'petal length (cm)']
 
+
+print(iris_df['sepal length (cm)'])
 
 #Extract entire dataframe based on one type of flower
 num_species = 0
@@ -57,26 +78,6 @@ a_df = iris_df.loc[iris_df['species']== num_species,]
 
 print("dataframe info of species {}".format(num_species))
 a_df.info()
-
-
-'''
-# Print density plot, mean, median, and mode
-print(p9.ggplot(a_sl)+ p9.aes(x='sepal length (cm)')+ p9.geom_density(alpha=0.2))
-print(a_sl.mean())
-print(a_sl.median())
-print(a_sl.mode())
-
-
-# Calculate theoretical quantiles
-tq = stats.probplot(a_sl['sepal length (cm)'], dist="norm")
-
-# Create Dataframe
-df_temp = pd.DataFrame(data= {'Theoretical Quantiles': tq[0][0], 
-                         "Ordered Values": a_sl['sepal length (cm)'].sort_values() })
-
-# Create Q-Q plot
-print(p9.ggplot(df_temp)+ p9.aes('Theoretical Quantiles','Ordered Values') +p9.geom_point())
-'''
 
 
 ## Scatter plot
